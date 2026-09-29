@@ -15,6 +15,7 @@ private:
     int columna;
 
     SymbolTable tablaSimbolos;
+    std::vector<std::string> errores;
 
 public:
     Lexer(const std::string& fuente);
@@ -22,18 +23,26 @@ public:
     std::vector<Token> analizar();
 
     SymbolTable& getTablaSimbolos();
+    const std::vector<std::string>& getErrores() const;
 
 private:
     void avanzar();
 
     bool esDigito(char c) const;
     bool esLetra(char c) const;
+    bool esEspacio(char c) const;
 
     Token reconocerNumero();
     Token reconocerIdentificador();
     Token reconocerTexto();
+    Token reconocerOperadorOsimbolo();
 
     bool esPalabraReservada(const std::string& lexema) const;
+    std::string tipoPalabraReservada(const std::string& lexema) const;
+
+    void agregarError(const std::string& mensaje,
+                      int lineaError,
+                      int columnaError);
 };
 
 #endif
