@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
 
 class SymbolTable {
 private:
@@ -11,7 +12,8 @@ private:
 public:
     int agregar(const std::string& lexema);
     int buscar(const std::string& lexema) const;
-    void mostrar() const;
+
+    void mostrar(std::ostream& salida) const;
 };
 
 #endif
