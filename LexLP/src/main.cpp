@@ -9,7 +9,7 @@
 int main() {
 
     std::string nombreArchivo =
-        "tests/prueba_errores.lp";
+        "tests/prueba_fase3.lp";
 
     std::ifstream archivo(nombreArchivo);
 
