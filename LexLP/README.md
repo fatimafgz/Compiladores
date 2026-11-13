@@ -25,14 +25,6 @@ Indica como argumento el archivo `.lp` que deseas analizar:
 ./output/LexLP.exe tests/prueba_sintactica.lp
 ```
 
-Si no indicas un archivo, el programa utiliza `tests/prueba_sintactica.lp`:
-
-```bash
-./output/LexLP.exe
-```
-
-> Ejecuta `./output/LexLP.exe`, no `./LexLP.exe`. El segundo corresponde al ejecutable léxico anterior que se encuentra en la raíz del proyecto.
-
 ## Ejemplo de programa válido
 
 ```c
@@ -76,7 +68,7 @@ Las funciones, estructuras de control, entrada y salida, AST y expresiones compl
 
 ---
 
-# 33. Integrantes
+# Integrantes
 
 **Curso:** Compiladores
 
