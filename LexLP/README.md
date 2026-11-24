@@ -1,72 +1,73 @@
-# LexLP — Analizador sintáctico
+# LexLP — Analizador léxico y sintáctico
 
-Este proyecto integra el analizador léxico de LP con un analizador sintáctico por descenso recursivo. Corresponde al **entregable 1**: reconoce la estructura básica del programa, declaraciones de variables y asignaciones sencillas.
+LexLP analiza programas escritos en LP. El analizador léxico convierte el código fuente en tokens y el analizador sintáctico comprueba si esos tokens cumplen la gramática del lenguaje. Cuando el programa es válido, se muestra su AST.
 
 ## Requisitos
 
-- Compilador `g++` con soporte para C++17.
-- Una terminal ubicada en la carpeta raíz del proyecto `LexLP`.
+- `g++` con soporte para C++17.
+- Terminal UCRT64 de MSYS2 o una terminal compatible con `g++`.
+- Ejecutar los comandos desde la carpeta raíz del proyecto.
+
+## Organización de módulos
+
+| Archivo | Responsabilidad |
+|---|---|
+| `src/main_sintactico.cpp` | Lee el archivo `.lp`, integra el lexer con el parser y muestra el resultado y el AST. |
+| `src/Lexer.h` y `src/Lexer.cpp` | Analizan el texto fuente y generan tokens. También reportan errores léxicos. |
+| `src/Token.h` y `src/Token.cpp` | Definen los tokens y sus datos: tipo, lexema, línea y columna. |
+| `src/Parser.h` y `src/Parser.cpp` | Analizan los tokens mediante descenso recursivo, reportan errores sintácticos y construyen el AST. |
+| `src/AST.h` | Define los nodos del AST y una función para imprimirlo. |
+| `src/SymbolTable.h` y `src/SymbolTable.cpp` | Mantienen la tabla de identificadores producidos por el lexer. |
+| `tests/` | Contiene programas `.lp` para probar el analizador. |
+| `output/` | Carpeta destinada al ejecutable y a las salidas guardadas. |
 
 ## Compilación
 
-En una terminal UCRT64, ejecuta:
+Desde la raíz del proyecto, compila el analizador sintáctico con:
 
 ```bash
-g++ -std=c++17 -Isrc src/main_sintactico.cpp src/Parser.cpp src/Lexer.cpp src/Token.cpp src/SymbolTable.cpp -o output/LexLP.exe
+g++ -std=c++17 -Wall -Wextra -Isrc \
+  src/main_sintactico.cpp src/Parser.cpp src/Lexer.cpp \
+  src/Token.cpp src/SymbolTable.cpp -o output/LexLP.exe
 ```
-
-El ejecutable del analizador sintáctico se genera en `output/LexLP.exe`.
 
 ## Ejecución
 
-Indica como argumento el archivo `.lp` que deseas analizar:
+Indica el archivo `.lp` como argumento:
 
 ```bash
 ./output/LexLP.exe tests/prueba_sintactica.lp
 ```
 
-## Ejemplo de programa válido
+Si no se proporciona una ruta, el programa intenta analizar `tests/prueba_sintactica.lp`.
+
+## Ejemplo válido
 
 ```c
 void main() {
     int edad;
     float promedio;
-
     edad = 20;
     promedio = 15.5;
-    edad = edad + 2 * 3;
+    if (edad >= 18 && edad <= 60) {
+        println("Edad valida");
+    } else {
+        println("Edad no valida");
+    }
+    while (edad > 0) {
+        edad = edad - 1;
+    }
+    return edad;
 }
 ```
 
-Resultado esperado:
+Al aceptar un programa, el sistema muestra:
 
 ```text
 Programa sintacticamente valido.
 ```
 
-## Ejemplo de programa inválido
-
-```c
-void main() {
-    int edad
-    edad = 20;
-}
-```
-
-El analizador debe informar que falta el punto y coma al finalizar la declaración.
-
-## Funcionalidades del entregable 1
-
-- Lectura de un archivo fuente `.lp`.
-- Obtención de tokens mediante el analizador léxico existente.
-- Reconocimiento de `void main()` y bloques delimitados por llaves.
-- Reconocimiento de declaraciones de variables simples.
-- Reconocimiento de asignaciones con números, identificadores y operaciones aritméticas sencillas.
-- Reporte de errores léxicos y sintácticos básicos.
-
-Las funciones, estructuras de control, entrada y salida, AST y expresiones completas corresponden al entregable 2.
-
----
+y luego imprime el AST.
 
 # Integrantes
 
