@@ -232,18 +232,19 @@ bool Lexer::esPalabraReservada(
     const std::string& lexema) const {
 
     return lexema == "int" ||
-           lexema == "float" ||
-           lexema == "char" ||
-           lexema == "boolean" ||
-           lexema == "void" ||
-           lexema == "if" ||
-           lexema == "else" ||
-           lexema == "for" ||
-           lexema == "while" ||
-           lexema == "scanf" ||
-           lexema == "println" ||
-           lexema == "main" ||
-           lexema == "return";
+       lexema == "float" ||
+       lexema == "char" ||
+       lexema == "boolean" ||
+       lexema == "void" ||
+       lexema == "func" ||
+       lexema == "if" ||
+       lexema == "else" ||
+       lexema == "for" ||
+       lexema == "while" ||
+       lexema == "scanf" ||
+       lexema == "println" ||
+       lexema == "main" ||
+       lexema == "return";
 }
 
 
@@ -256,6 +257,7 @@ std::string Lexer::tipoPalabraReservada(
     if (lexema == "char") return "CHAR";
     if (lexema == "boolean") return "BOOLEAN";
     if (lexema == "void") return "VOID";
+    if (lexema == "func") return "FUNC";
     if (lexema == "if") return "IF";
     if (lexema == "else") return "ELSE";
     if (lexema == "for") return "FOR";
@@ -264,7 +266,6 @@ std::string Lexer::tipoPalabraReservada(
     if (lexema == "println") return "PRINTLN";
     if (lexema == "main") return "MAIN";
     if (lexema == "return") return "RETURN";
-
     return "ID";
 }
 
@@ -315,22 +316,19 @@ Token Lexer::reconocerOperadorOsimbolo() {
         std::string dosCaracteres =
             fuente.substr(posicion, 2);
 
-        if (dosCaracteres == "&&" ||
-            dosCaracteres == "||" ||
-            dosCaracteres == ">=" ||
+        if (dosCaracteres == "&&" || dosCaracteres == "||") {
+            avanzar();
+            avanzar();
+            return Token(dosCaracteres, dosCaracteres, lineaInicial, columnaInicial);
+        }
+
+        if (dosCaracteres == ">=" ||
             dosCaracteres == "<=" ||
             dosCaracteres == "!=" ||
             dosCaracteres == "==") {
-
             avanzar();
             avanzar();
-
-            return Token(
-                dosCaracteres,
-                dosCaracteres,
-                lineaInicial,
-                columnaInicial
-            );
+            return Token("COMP", dosCaracteres, lineaInicial, columnaInicial);
         }
     }
 

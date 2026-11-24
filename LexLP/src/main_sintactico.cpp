@@ -1,5 +1,5 @@
 #include "Lexer.h"
-#include "parser.h"
+#include "Parser.h"
 
 #include <fstream>
 #include <iostream>
@@ -34,17 +34,32 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    Parser parser(tokens);
-
-    if (parser.analizar()) {
-        std::cout << "Programa sintacticamente valido.\n";
-        return 0;
+    // Los comentarios son tokens del lexer, pero no forman parte de la gramática.
+    std::vector<Token> tokensParser;
+    for (const Token& token : tokens) {
+        if (token.getTipo() != "COMENT") {
+            tokensParser.push_back(token);
+        }
     }
 
-    std::cout << "Programa sintacticamente incorrecto:\n";
-    for (const std::string& error : parser.getErrores()) {
-        std::cout << "- " << error << '\n';
+    Parser parser(tokensParser);
+
+    if (!parser.analizar()) {
+        std::cout << "Programa sintacticamente incorrecto:\n";
+
+        for (const std::string& error : parser.getErrores()) {
+            std::cout << "- " << error << '\n';
+        }
+
+        return 1;
     }
 
-    return 1;
+    std::cout << "Programa sintacticamente valido.\n";
+    std::cout << "\nAST:\n";
+
+    if (parser.getAST() != nullptr) {
+        imprimirAST(*parser.getAST(), std::cout);
+    }
+
+    return 0;
 }
